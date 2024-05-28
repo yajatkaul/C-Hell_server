@@ -11,7 +11,7 @@ int main(){
     struct sockaddr_in addr;
     addr.sin_family = AF_INET;
     addr.sin_addr.s_addr = 0;
-    addr.sin_port = htons(8080);
+    addr.sin_port = htons(8081);
 
     bind(s,(struct sockaddr*) &addr, sizeof(addr));
 
