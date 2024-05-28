@@ -74,25 +74,22 @@ int main() {
     struct sockaddr_in server_addr, client_addr;
     int client_addr_len = sizeof(client_addr);
 
-    // Initialize Winsock
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
         fprintf(stderr, "WSAStartup failed. Error Code : %d\n", WSAGetLastError());
         return 1;
     }
 
-    // Create socket
+
     if ((server_socket = socket(AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET) {
         fprintf(stderr, "Could not create socket. Error Code : %d\n", WSAGetLastError());
         WSACleanup();
         return 1;
     }
 
-    // Prepare the sockaddr_in structure
     server_addr.sin_family = AF_INET;
     server_addr.sin_addr.s_addr = INADDR_ANY;
     server_addr.sin_port = htons(PORT);
 
-    // Bind
     if (bind(server_socket, (struct sockaddr *)&server_addr, sizeof(server_addr)) == SOCKET_ERROR) {
         fprintf(stderr, "Bind failed. Error Code : %d\n", WSAGetLastError());
         closesocket(server_socket);
@@ -100,7 +97,7 @@ int main() {
         return 1;
     }
 
-    // Listen to incoming connections
+
     if (listen(server_socket, 3) == SOCKET_ERROR) {
         fprintf(stderr, "Listen failed. Error Code : %d\n", WSAGetLastError());
         closesocket(server_socket);
@@ -110,7 +107,7 @@ int main() {
 
     printf("Server is listening on port %d\n", PORT);
 
-    // Accept and incoming connection
+
     while ((client_socket = accept(server_socket, (struct sockaddr *)&client_addr, &client_addr_len)) != INVALID_SOCKET) {
         printf("Connection accepted from %s:%d\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
         handle_client(client_socket);
@@ -120,7 +117,6 @@ int main() {
         fprintf(stderr, "Accept failed. Error Code : %d\n", WSAGetLastError());
     }
 
-    // Clean up
     closesocket(server_socket);
     WSACleanup();
 
